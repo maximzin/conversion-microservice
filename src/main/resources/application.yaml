@@ -1,3 +1,62 @@
 spring:
   application:
     name: conversion-microservice
+
+  ### kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: conversion-created-events-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.zinoviev.conversion_microservice.messaging.event.*
+        spring.json.value.default.type: com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent
+
+    producer:
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 5
+      properties:
+        retry.backoff: 1000
+        delivery.timeout.ms: 120000
+        enable.idempotence: true
+        linger.ms: 0
+        max.in.flight.requests.per.connection: 5
+        request.timeout.ms: 30000
+
+  ### Postgres DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/conversion_microservice
+    username: myuser
+    password: 12345
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/db.changelog-master.yaml
+
+# Topic names
+topic:
+  conversion:
+    created:
+      events: conversion-created-events-topic
+    processed:
+      events: conversion-processed-events-topic
+
+# MinIO dir paths
+storage:
+  directory:
+    conversion:
+      processed:
+        pdf: /conversion/processed/pdf/
+
+server:
+  port: 8080
+
+logging:
+  charset:
+    console: UTF-8

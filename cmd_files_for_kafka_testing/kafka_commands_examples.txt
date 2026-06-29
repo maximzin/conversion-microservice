@@ -1,0 +1,8 @@
+Отправить сообщение в топик
+opt/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic conversion-created-events-topic --property "key.separator=:" --property parse.headers=true --property headers.key.separator=: --property "headers.delimiter=;"
+
+Само сообщение для топика:
+messageId:bea5098c-cfd2-4c2b-b72c-400aa26a0c5a;{"eventId": "bea5098c-cfd2-4c2b-b72c-400aa26a0c5a","filePath":"justpath", "createdAt": "2026-06-28T10:00:00Z"}
+
+Получить сообщение:
+opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic conversion-created-events-topic --from-beginning
