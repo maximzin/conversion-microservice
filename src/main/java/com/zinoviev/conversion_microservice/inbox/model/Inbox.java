@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,10 +24,10 @@ public class Inbox {
     private InboxStatus status;
 
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "processed_at")
-    private Instant processedAt;
+    private LocalDateTime processedAt;
 
     public enum InboxStatus {
         RECEIVED, PROCESSING, COMPLETED, FAILED
@@ -36,6 +36,6 @@ public class Inbox {
     public Inbox(UUID messageId) {
         this.messageId = messageId;
         this.status = InboxStatus.RECEIVED;
-        this.setCreatedAt(Instant.now());
+        this.setCreatedAt(LocalDateTime.now());
     }
 }

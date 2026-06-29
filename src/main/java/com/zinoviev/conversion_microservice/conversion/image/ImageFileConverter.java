@@ -1,7 +1,8 @@
 package com.zinoviev.conversion_microservice.conversion.image;
 
-import com.zinoviev.conversion_microservice.common.exception.conversion.ImageConversionException;
+import com.zinoviev.conversion_microservice.common.exception.conversion.TxtConversionException;
 import com.zinoviev.conversion_microservice.conversion.api.FileConverter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -14,10 +15,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Set;
 
 @Component
+@Slf4j
 public class ImageFileConverter implements FileConverter {
 
     private static final Set<String> SUPPORTED_EXTENSIONS =
@@ -29,7 +30,7 @@ public class ImageFileConverter implements FileConverter {
     }
 
     @Override
-    public byte[] convert(byte[] fileContent) {
+    public byte[] convert(String fileExtension, byte[] fileContent) {
         try {
             BufferedImage image = ImageIO.read(new ByteArrayInputStream(fileContent));
             try (PDDocument document = new PDDocument()) {
@@ -48,8 +49,9 @@ public class ImageFileConverter implements FileConverter {
                 document.save(baos);
                 return baos.toByteArray();
             }
-        } catch (IOException e) {
-            throw new ImageConversionException("Failed to convert image to PDF");
+        } catch (Exception e) {
+            log.error("Не удалось сконвертировать файл {} в PDF", fileExtension.toUpperCase(), e);
+            throw new TxtConversionException(String.format("Не удалось сконвертировать файл %s в PDF", fileExtension.toUpperCase()), e);
         }
     }
 

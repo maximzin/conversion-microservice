@@ -71,7 +71,7 @@ class FileKeyUtilsTest {
     @DisplayName("Даем корректные параметры, должен вернуть полный ключ")
     void createFileKey_shouldReturnCorrectFileKey() {
         // given
-        String directoryPath = "/direction/files/document/";
+        String directoryPath = "/files/document/";
         String fileName = "document";
         String fileExtension = ".txt";
 
@@ -80,6 +80,6 @@ class FileKeyUtilsTest {
 
         // then
         assertThat(fileKey)
-                .isEqualTo("/direction/files/document/document.txt");
+                .isEqualTo("/files/document/document.txt");
     }
 }

@@ -1,14 +1,50 @@
 package com.zinoviev.conversion_microservice.storage.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
+@Service
+@Slf4j
 public class StorageServiceImpl implements StorageService {
 
-    @Override
-    public byte[] downloadFile(String filePath) {
-        return new byte[0];
+    private final S3Client s3Client;
+
+    @Value("${minio.bucket-name}")
+    private String bucketName;
+
+    public StorageServiceImpl(S3Client s3Client) {
+        this.s3Client = s3Client;
+
     }
 
     @Override
-    public void uploadFile(String filePath, byte[] bytes) {
-        System.out.println("UPLOAD");
+    public byte[] downloadFile(String fileKey) {
+        GetObjectRequest request = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileKey)
+                .build();
+
+        ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(request);
+        log.info("Из хранилиша скачан файл: {}", fileKey);
+        return response.asByteArray();
+    }
+
+    @Override
+    public void uploadFile(String fileKey, byte[] fileBytes, String contentType) {
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileKey)
+                .contentType(contentType)
+                .build();
+
+        s3Client.putObject(request, RequestBody.fromBytes(fileBytes));
+        log.info("В хранилище загружен файл: {}", fileKey);
     }
 }

@@ -1,11 +1,12 @@
 package com.zinoviev.conversion_microservice.inbox.service;
 
-import com.zinoviev.conversion_microservice.inbox.model.Inbox;
 import com.zinoviev.conversion_microservice.inbox.dao.InboxRepository;
+import com.zinoviev.conversion_microservice.inbox.model.Inbox;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,8 +20,8 @@ public class InboxServiceImpl implements InboxService {
 
     @Override
     @Transactional
-    public boolean isMessageExistsAndCompleted(UUID messageId, Inbox.InboxStatus status) {
-        return inboxRepository.findByMessageIdAndStatus(messageId, status).isPresent();
+    public Optional<Inbox> findByMessageId(UUID messageId) {
+        return inboxRepository.findByMessageId(messageId);
     }
 
     @Override
@@ -28,5 +29,17 @@ public class InboxServiceImpl implements InboxService {
     public void saveMessage(UUID messageId) {
         Inbox inbox = new Inbox(messageId);
         inboxRepository.save(inbox);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(UUID messageId, Inbox.InboxStatus status) {
+        inboxRepository.setNewStatusForMessage(messageId, status);
+    }
+
+    @Override
+    @Transactional
+    public void updateProcessedAt(UUID messageId) {
+        inboxRepository.setProcessedAtForMessage(messageId, LocalDateTime.now());
     }
 }

@@ -36,7 +36,7 @@ class ImageFileConverterTest {
         byte[] jpegBytes = createTestImage("jpeg");
 
         // when
-        byte[] pdfBytes = converter.convert(jpegBytes);
+        byte[] pdfBytes = converter.convert("jpeg", jpegBytes);
 
         // then
         try (PDDocument doc = Loader.loadPDF(pdfBytes)) {
@@ -51,7 +51,7 @@ class ImageFileConverterTest {
         byte[] pngBytes = createTestImage("png");
 
         // when
-        byte[] pdfBytes = converter.convert(pngBytes);
+        byte[] pdfBytes = converter.convert("png", pngBytes);
 
         // then
         assertThat(pdfBytes).isNotEmpty();

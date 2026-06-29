@@ -47,12 +47,22 @@ topic:
     processed:
       events: conversion-processed-events-topic
 
+# MinIO config
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: conversion
 # MinIO dir paths
 storage:
   directory:
     conversion:
       processed:
-        pdf: /conversion/processed/pdf/
+        pdf: /processed/pdf/
+
+#Pdfbox custom font
+pdfbox:
+  custom-font: /font/DejaVuSans.ttf
 
 server:
   port: 8080

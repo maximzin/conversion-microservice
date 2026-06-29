@@ -4,6 +4,6 @@ public interface FileConverter {
 
     boolean supports(String fileExtension);
 
-    byte[] convert(byte[] bytes);
+    byte[] convert(String fileExtension, byte[] bytes);
 
 }

@@ -21,9 +21,10 @@ class TxtFileConverterTest {
         // given
         String text = "Title text\nBody text";
         byte[] input = text.getBytes(StandardCharsets.UTF_8);
+        String fileExtension = "txt";
 
         // when
-        byte[] pdfBytes = converter.convert(input);
+        byte[] pdfBytes = converter.convert(fileExtension,input);
 
         // then
         assertThat(pdfBytes).isNotEmpty();
