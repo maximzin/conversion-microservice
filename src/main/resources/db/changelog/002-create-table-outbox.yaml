@@ -7,11 +7,16 @@ databaseChangeLog:
             tableName: outbox
             columns:
               - column:
-                  name: message_id
+                  name: id
                   type: UUID
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_outbox
+              - column:
+                  name: message_id
+                  type: UUID
+                  constraints:
+                    nullable: false
               - column:
                   name: topic_name
                   type: text

@@ -15,4 +15,6 @@ public interface InboxService {
 
     void updateProcessedAt(UUID messageId);
 
+    void cleanInboxTableByOldLimitDateTime(int durationHoursToDelete);
+
 }

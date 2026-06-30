@@ -1,17 +1,18 @@
 package com.zinoviev.conversion_microservice.messaging.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zinoviev.conversion_microservice.common.exception.UnknownMessageStatusException;
 import com.zinoviev.conversion_microservice.conversion.service.ConversionService;
 import com.zinoviev.conversion_microservice.inbox.model.Inbox;
 import com.zinoviev.conversion_microservice.inbox.service.InboxService;
 import com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent;
 import com.zinoviev.conversion_microservice.messaging.event.ConversionProcessedEvent;
+import com.zinoviev.conversion_microservice.outbox.service.OutboxService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 @KafkaListener(
         topics = "${topic.conversion.created.events}",
         groupId = "${spring.kafka.consumer.group-id}")
@@ -34,13 +36,8 @@ public class ConversionCreatedEventHandler {
 
     private final InboxService inboxService;
     private final ConversionService conversionService;
-    private final KafkaTemplate<String, ConversionProcessedEvent> kafkaTemplate;
-
-    public ConversionCreatedEventHandler(InboxService inboxService, ConversionService conversionService, KafkaTemplate<String, ConversionProcessedEvent> kafkaTemplate) {
-        this.inboxService = inboxService;
-        this.conversionService = conversionService;
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    private final OutboxService outboxService;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     @KafkaHandler
@@ -81,25 +78,21 @@ public class ConversionCreatedEventHandler {
         inboxService.updateStatus(uuidMessageId, Inbox.InboxStatus.PROCESSING);
 
         try {
+            // Получаем список ключей сконвертированных файлов
             List<String> convertedFileKeys = conversionService.convertFileToPdf(event.fileKey());
 
             // Посылаем результаты в Kafka
             for (String fileKey : convertedFileKeys) {
+
                 ConversionProcessedEvent conversionProcessedEvent = new ConversionProcessedEvent(
                         UUID.randomUUID(),
                         fileKey,
-                        LocalDateTime.now()
-                );
-                ProducerRecord<String, ConversionProcessedEvent> record = new ProducerRecord<>(
-                        conversionProcessedEventsTopicName,
-                        messageId,
-                        conversionProcessedEvent
-                );
-                record.headers().add("messageId", uuidMessageId.toString().getBytes());
+                        LocalDateTime.now());
 
-                kafkaTemplate.send(record).get();
+                String payload = objectMapper.writeValueAsString(conversionProcessedEvent);
 
-                log.info("Сообщение в {} успешно отправлено, messageId: {}", conversionProcessedEventsTopicName, uuidMessageId);
+                outboxService.save(uuidMessageId, conversionProcessedEventsTopicName, payload);
+
                 inboxService.updateStatus(uuidMessageId, Inbox.InboxStatus.COMPLETED);
                 inboxService.updateProcessedAt(uuidMessageId);
             }

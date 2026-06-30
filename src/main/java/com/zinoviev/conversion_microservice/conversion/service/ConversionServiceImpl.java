@@ -6,6 +6,7 @@ import com.zinoviev.conversion_microservice.common.util.FileKeyUtils;
 import com.zinoviev.conversion_microservice.conversion.api.FileConverter;
 import com.zinoviev.conversion_microservice.conversion.service.converterRegistry.ConverterRegistryService;
 import com.zinoviev.conversion_microservice.storage.service.StorageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.zip.ZipInputStream;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ConversionServiceImpl implements ConversionService {
 
     @Value("${minio.bucket-name}")
@@ -28,16 +30,11 @@ public class ConversionServiceImpl implements ConversionService {
     @Value("${storage.directory.conversion.processed.pdf}")
     private String dirForConvertedPdf;
 
-    private final StorageService storageService;
-    private final ConverterRegistryService converterRegistryService;
-
     // Типы файлов, которые считаются архивами
     private static final Set<String> ARCHIVE_EXTENSIONS = Set.of("zip");
 
-    public ConversionServiceImpl(StorageService storageService, ConverterRegistryService converterRegistryService) {
-        this.storageService = storageService;
-        this.converterRegistryService = converterRegistryService;
-    }
+    private final StorageService storageService;
+    private final ConverterRegistryService converterRegistryService;
 
     // Получаем fileKey файла в хранилище
     @Override

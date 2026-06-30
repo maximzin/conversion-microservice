@@ -64,6 +64,13 @@ storage:
 pdfbox:
   custom-font: /font/DejaVuSans.ttf
 
+inbox:
+  duration-hours-to-delete: 6 # удаляются записи старее 6 часов
+  deletion-period-cron: '0 0 */3 * * *' # каждые 3 часа
+
+outbox:
+  sending-period-cron: '0 */5 * * * *' # каждые 5 минут'
+
 server:
   port: 8080
 

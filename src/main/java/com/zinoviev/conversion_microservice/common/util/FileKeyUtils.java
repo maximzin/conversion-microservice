@@ -2,6 +2,9 @@ package com.zinoviev.conversion_microservice.common.util;
 
 public class FileKeyUtils {
 
+    // Приватный пустой конструктор для запрета создания экземпляров класса
+    private FileKeyUtils() {}
+
     public static String parseFileNameWithoutExtension(String fileKey) {
         String fileName = parseFileNameWithExtension(fileKey);
 

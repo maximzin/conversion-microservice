@@ -28,4 +28,11 @@ public interface InboxRepository extends JpaRepository<Inbox, UUID> {
         WHERE i.messageId = :messageId
     """)
     void setProcessedAtForMessage(@Param("messageId") UUID messageID, @Param("processedAt") LocalDateTime processedAt);
+
+    @Modifying
+    @Query("""
+        DELETE FROM Inbox o
+        WHERE o.createdAt <= :oldLimitDateTime
+    """)
+    int deleteMessagesByOldLimitDateTime(@Param("oldLimitDateTime") LocalDateTime oldLimitDateTime);
 }

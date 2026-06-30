@@ -1,5 +1,6 @@
 package com.zinoviev.conversion_microservice.storage.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,13 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StorageServiceImpl implements StorageService {
-
-    private final S3Client s3Client;
 
     @Value("${minio.bucket-name}")
     private String bucketName;
 
-    public StorageServiceImpl(S3Client s3Client) {
-        this.s3Client = s3Client;
-
-    }
+    private final S3Client s3Client;
 
     @Override
     public byte[] downloadFile(String fileKey) {
