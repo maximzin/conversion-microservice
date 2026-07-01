@@ -19,7 +19,7 @@ public class InboxServiceImpl implements InboxService {
     private final InboxRepository inboxRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<Inbox> findByMessageId(UUID messageId) {
         return inboxRepository.findByMessageId(messageId);
     }
