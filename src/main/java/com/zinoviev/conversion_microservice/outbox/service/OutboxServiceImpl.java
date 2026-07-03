@@ -1,5 +1,8 @@
 package com.zinoviev.conversion_microservice.outbox.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zinoviev.conversion_microservice.messaging.event.ConversionProcessedEvent;
 import com.zinoviev.conversion_microservice.outbox.dao.OutboxRepository;
 import com.zinoviev.conversion_microservice.outbox.model.Outbox;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class OutboxServiceImpl implements OutboxService {
 
     private final OutboxRepository outboxRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
     @Transactional
@@ -30,14 +34,20 @@ public class OutboxServiceImpl implements OutboxService {
 
     @Override
     @Transactional
-    public void sendToKafka() throws ExecutionException, InterruptedException {
+    public void sendToKafka() throws ExecutionException, InterruptedException, JsonProcessingException {
         List<Outbox> outboxList = outboxRepository.findAll();
 
         for (Outbox outbox : outboxList) {
-            ProducerRecord<String, Object> record = new ProducerRecord<>(
-                    outbox.getTopicName(),
-                    outbox.getMessageId().toString(),
-                    outbox.getPayload());
+            ConversionProcessedEvent event =
+                    objectMapper.readValue(
+                            outbox.getPayload(),
+                            ConversionProcessedEvent.class);
+
+            ProducerRecord<String, Object> record =
+                    new ProducerRecord<>(
+                            outbox.getTopicName(),
+                            outbox.getMessageId().toString(),
+                            event);
 
             record.headers().add("messageId", outbox.getMessageId().toString().getBytes());
 
