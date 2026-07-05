@@ -1,12 +1,12 @@
 package com.zinoviev.conversion_microservice.conversion.txt;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,9 +15,10 @@ class TxtFileConverterTest {
 
     private final TxtFileConverter converter = new TxtFileConverter();
 
-    @Test
     @DisplayName("Конвертирует TXT файл в PDF")
-    void convert_shouldConvertTxtToPdf() throws IOException {
+    @SneakyThrows
+    @Test
+    void convert_shouldConvertTxtToPdf() {
         // given
         String text = "Title text\nBody text";
         byte[] input = text.getBytes(StandardCharsets.UTF_8);

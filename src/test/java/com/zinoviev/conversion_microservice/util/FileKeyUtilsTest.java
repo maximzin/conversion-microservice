@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FileKeyUtilsTest {
 
     // FileName test
-    @Test
     @DisplayName("Даем корректный ключ и получаем корректное имя файла")
+    @Test
     void parseFileNameWithoutExtension_shouldReturnCorrectName() {
         // given
         String fileKey = "/direction/files/document.txt";
@@ -23,8 +23,8 @@ class FileKeyUtilsTest {
                 .isEqualTo("document");
     }
 
-    @Test
     @DisplayName("Даем некорректный ключ и получаем пустую строку")
+    @Test
     void parseFileNameWithoutExtension_shouldReturnEmptyString() {
         // given
         String fileKey = "/direction/files/document/";
@@ -38,8 +38,8 @@ class FileKeyUtilsTest {
     }
 
     // Extension test
-    @Test
     @DisplayName("Даем корректный ключ и получаем корректное расширение файла")
+    @Test
     void parseFileExtension_shouldReturnCorrectExt() {
         // given
         String fileKey = "/direction/files/document.txt";
@@ -52,8 +52,8 @@ class FileKeyUtilsTest {
                 .isEqualTo("txt");
     }
 
-    @Test
     @DisplayName("Даем некорректный ключ и получаем пустую строку")
+    @Test
     void parseFileExtension_shouldReturnEmptyString() {
         // given
         String fileKey = "/direction/files/document/";
@@ -67,8 +67,8 @@ class FileKeyUtilsTest {
     }
 
     // Creating fileKey
-    @Test
     @DisplayName("Даем корректные параметры, должен вернуть полный ключ")
+    @Test
     void createFileKey_shouldReturnCorrectFileKey() {
         // given
         String directoryPath = "/files/document/";

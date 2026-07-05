@@ -1,11 +1,11 @@
 package com.zinoviev.conversion_microservice.messaging.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zinoviev.conversion_microservice.AbstractIT;
 import com.zinoviev.conversion_microservice.inbox.model.Inbox;
 import com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent;
 import com.zinoviev.conversion_microservice.messaging.event.ConversionProcessedEvent;
 import com.zinoviev.conversion_microservice.outbox.model.Outbox;
+import lombok.SneakyThrows;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -26,7 +26,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
@@ -83,8 +82,9 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
     }
 
     @DisplayName("Получить сообщение из топика, обработать и послать в другой топик")
+    @SneakyThrows
     @Test
-    void handle_shouldGetMessageFromTopicAndProcessAndSendToAnotherTopic() throws ExecutionException, InterruptedException, JsonProcessingException {
+    void handle_shouldGetMessageFromTopicAndProcessAndSendToAnotherTopic() {
         // given
         String readyFileKey = "/processed/file.pdf";
 
@@ -136,8 +136,9 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
     }
 
     @DisplayName("Получить дубликат сообщения из топика и проигнорировать")
+    @SneakyThrows
     @Test
-    void handle_shouldGetDuplicateFromTopicAndIgnore() throws InterruptedException {
+    void handle_shouldGetDuplicateFromTopicAndIgnore() {
         // given
         UUID messageId = UUID.randomUUID();
         Inbox inboxBefore = new Inbox(messageId);

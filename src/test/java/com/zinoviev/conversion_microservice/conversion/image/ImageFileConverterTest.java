@@ -1,5 +1,6 @@
 package com.zinoviev.conversion_microservice.conversion.image;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.DisplayName;
@@ -29,9 +30,10 @@ class ImageFileConverterTest {
         return baos.toByteArray();
     }
 
-    @Test
     @DisplayName("Конвертирует JPG файл в PDF")
-    void convert_shouldConvertJpgToPdf() throws Exception {
+    @SneakyThrows
+    @Test
+    void convert_shouldConvertJpgToPdf() {
         // given
         byte[] jpegBytes = createTestImage("jpeg");
 
@@ -44,9 +46,10 @@ class ImageFileConverterTest {
         }
     }
 
-    @Test
     @DisplayName("Конвертирует PNG файл в PDF")
-    void convert_shouldConvertPngToPdf() throws Exception {
+    @SneakyThrows
+    @Test
+    void convert_shouldConvertPngToPdf() {
         // given
         byte[] pngBytes = createTestImage("png");
 
