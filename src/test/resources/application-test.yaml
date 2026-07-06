@@ -1,4 +1,19 @@
 spring:
+  datasource:
+    url: jdbc:tc:postgresql:15:///testdb?TC_TMPFS=/testtmpfs:size=128M
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+#  liquibase:
+#    default-schema: ${random.uuid}
+  jpa:
+    hibernate:
+      ddl-auto: none
+
   kafka:
     consumer:
       auto-offset-reset: earliest
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: test
+  secret-key: test
+  bucket-name: test

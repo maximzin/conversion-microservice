@@ -21,7 +21,6 @@ import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@ActiveProfiles("test")
+
 class ConversionCreatedEventHandlerIT extends AbstractIT {
 
     // Слушающий контейнер для исходящих сообщений
@@ -44,6 +43,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
 
     @BeforeAll
     void setUp() {
+        // Горит красным из-за deprecated, но используя JacksonDeserializer возникает проблема конфликта библиотек "Caused by: java.lang.ClassNotFoundException: tools.jackson.databind.JavaType"
         JsonDeserializer<ConversionProcessedEvent> deserializer =
                 new JsonDeserializer<>(ConversionProcessedEvent.class, false);
 

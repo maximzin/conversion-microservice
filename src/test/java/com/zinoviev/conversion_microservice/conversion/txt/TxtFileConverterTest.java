@@ -4,8 +4,10 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -13,7 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TxtFileConverterTest {
 
-    private final TxtFileConverter converter = new TxtFileConverter();
+    private TxtFileConverter converter;
+
+    @BeforeEach
+    void setUp() {
+        converter = new TxtFileConverter();
+        ReflectionTestUtils.setField(converter, "pdfBoxCustomFontPath", "/font/DejaVuSans.ttf");
+    }
 
     @DisplayName("Конвертирует TXT файл в PDF")
     @SneakyThrows

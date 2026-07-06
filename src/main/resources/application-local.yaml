@@ -1,0 +1,19 @@
+spring:
+  port: 8080
+
+  ### Kafka
+  bootstrap-servers: localhost:9092
+
+  ### Postgres DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/conversion_microservice
+    username: myuser
+    password: 12345
+
+# MinIO config
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: conversion
