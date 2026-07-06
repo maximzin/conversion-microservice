@@ -29,6 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
         "spring.kafka.consumer.bootstrap-servers=${spring.embedded.kafka.brokers}",
 })
 @ActiveProfiles("test")
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public abstract class AbstractIT {
 
     @Autowired
@@ -58,6 +59,5 @@ public abstract class AbstractIT {
 
     @Autowired
     protected OutboxScheduleSending outboxScheduleSending;
-
 
 }
