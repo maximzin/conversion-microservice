@@ -1,8 +1,6 @@
 spring:
   application:
     name: conversion-microservice
-#  profiles:
-#    active: local
 
   ### kafka
   kafka:
