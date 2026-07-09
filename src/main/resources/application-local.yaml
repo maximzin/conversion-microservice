@@ -17,3 +17,9 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: conversion
+
+### Eureka config
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
