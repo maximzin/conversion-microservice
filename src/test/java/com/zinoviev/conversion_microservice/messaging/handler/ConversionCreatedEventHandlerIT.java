@@ -88,7 +88,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         // given
         String readyFileKey = "/processed/file.pdf";
 
-        UUID messageId = UUID.randomUUID();
+        UUID messageKey = UUID.randomUUID();
 
         ConversionCreatedEvent conversionCreatedEvent = new ConversionCreatedEvent(
                 UUID.randomUUID(),
@@ -97,10 +97,10 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
 
         ProducerRecord<String, Object> record = new ProducerRecord<>(
                 environment.getProperty("topic.conversion.created.events"),
-                messageId.toString(),
+                messageKey.toString(),
                 conversionCreatedEvent);
 
-        record.headers().add("messageId", messageId.toString().getBytes());
+        record.headers().add("messageKey", messageKey.toString().getBytes());
 
         // when
         when(conversionService.convertFileToPdf(anyString()))
@@ -111,7 +111,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         Thread.sleep(2000);
 
         // then
-        Inbox inbox = inboxRepository.findByMessageId(messageId).orElseThrow();
+        Inbox inbox = inboxRepository.findByMessageKey(messageKey).orElseThrow();
         assertThat(inbox.getStatus()).isEqualTo(Inbox.InboxStatus.COMPLETED);
 
         List<Outbox> outboxes = outboxRepository.findAll();
@@ -129,10 +129,10 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         assertNotNull(incomeMessage);
         assertNotNull(incomeMessage.headers());
         Header header = Arrays.stream(incomeMessage.headers().toArray()).findFirst().orElseThrow();
-        assertEquals(header.key(), "messageId");
+        assertEquals(header.key(), "messageKey");
 
         ConversionProcessedEvent conversionProcessedEvent = incomeMessage.value();
-        assertEquals(conversionProcessedEvent.fileKey(), readyFileKey);
+        assertEquals(conversionProcessedEvent.originalFileKey(), readyFileKey);
     }
 
     @DisplayName("Получить дубликат сообщения из топика и проигнорировать")
@@ -140,8 +140,8 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
     @Test
     void handle_shouldGetDuplicateFromTopicAndIgnore() {
         // given
-        UUID messageId = UUID.randomUUID();
-        Inbox inboxBefore = new Inbox(messageId);
+        UUID messageKey = UUID.randomUUID();
+        Inbox inboxBefore = new Inbox(messageKey);
         inboxRepository.save(inboxBefore);
 
         String readyFileKey = "/processed/file.pdf";
@@ -153,10 +153,10 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
 
         ProducerRecord<String, Object> record = new ProducerRecord<>(
                 environment.getProperty("topic.conversion.created.events"),
-                messageId.toString(),
+                messageKey.toString(),
                 conversionCreatedEvent);
 
-        record.headers().add("messageId", messageId.toString().getBytes());
+        record.headers().add("messageKey", messageKey.toString().getBytes());
 
         // when
         when(conversionService.convertFileToPdf(anyString()))
@@ -168,7 +168,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         List<Inbox> inboxes = inboxRepository.findAll();
         assertThat(inboxes).hasSize(1);
 
-        Inbox inboxAfter = inboxRepository.findByMessageId(messageId).orElseThrow();
+        Inbox inboxAfter = inboxRepository.findByMessageKey(messageKey).orElseThrow();
         assertThat(inboxAfter.getStatus()).isEqualTo(Inbox.InboxStatus.RECEIVED);
     }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 public interface OutboxService {
 
-    void save(UUID messageId, String topicName, String payload);
+    void save(UUID messageKey, String topicName, String payload);
 
     void sendToKafka() throws ExecutionException, InterruptedException, JsonProcessingException;
 

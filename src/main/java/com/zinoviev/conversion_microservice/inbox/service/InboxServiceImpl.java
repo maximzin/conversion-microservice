@@ -20,27 +20,27 @@ public class InboxServiceImpl implements InboxService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Inbox> findByMessageId(UUID messageId) {
-        return inboxRepository.findByMessageId(messageId);
+    public Optional<Inbox> findByMessageKey(UUID messageKey) {
+        return inboxRepository.findByMessageKey(messageKey);
     }
 
     @Override
     @Transactional
-    public void saveMessage(UUID messageId) {
-        Inbox inbox = new Inbox(messageId);
+    public void saveMessage(UUID messageKey) {
+        Inbox inbox = new Inbox(messageKey);
         inboxRepository.save(inbox);
     }
 
     @Override
     @Transactional
-    public void updateStatus(UUID messageId, Inbox.InboxStatus status) {
-        inboxRepository.setNewStatusForMessage(messageId, status);
+    public void updateStatus(UUID messageKey, Inbox.InboxStatus status) {
+        inboxRepository.setNewStatusForMessage(messageKey, status);
     }
 
     @Override
     @Transactional
-    public void updateProcessedAt(UUID messageId) {
-        inboxRepository.setProcessedAtForMessage(messageId, LocalDateTime.now());
+    public void updateProcessedAt(UUID messageKey) {
+        inboxRepository.setProcessedAtForMessage(messageKey, LocalDateTime.now());
     }
 
     @Override

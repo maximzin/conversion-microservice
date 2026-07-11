@@ -2,12 +2,16 @@ spring:
   port: ${SERVER_PORT}
 
   ### Kafka
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    admin:
+      auto-create: false
+
 
   ### Postgres DB
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DATASOURCE_URL}          # передаётся через переменную окружения
+    url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
 

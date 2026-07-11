@@ -36,7 +36,7 @@ public class ConversionServiceImpl implements ConversionService {
     private final StorageService storageService;
     private final ConverterRegistryService converterRegistryService;
 
-    // Получаем fileKey файла в хранилище
+    // Получаем originalFileKey файла в хранилище
     @Override
     public List<String> convertFileToPdf(String fileKey) {
 

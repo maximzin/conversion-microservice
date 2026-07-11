@@ -5,6 +5,9 @@ import java.util.UUID;
 
 public record ConversionProcessedEvent(
         UUID eventId,
-        String fileKey,
+        ConversionEventStatus status,
+        String originalFileKey,
+        String convertedFileKey,
+        String errorMessage,
         LocalDateTime createdAt
 ) {}

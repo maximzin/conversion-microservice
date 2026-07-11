@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public interface InboxService {
 
-    Optional<Inbox> findByMessageId(UUID messageId);
+    Optional<Inbox> findByMessageKey(UUID messageKey);
 
-    void saveMessage(UUID messageId);
+    void saveMessage(UUID messageKey);
 
-    void updateStatus(UUID messageId, Inbox.InboxStatus status);
+    void updateStatus(UUID messageKey, Inbox.InboxStatus status);
 
-    void updateProcessedAt(UUID messageId);
+    void updateProcessedAt(UUID messageKey);
 
     void cleanInboxTableByOldLimitDateTime(int durationHoursToDelete);
 

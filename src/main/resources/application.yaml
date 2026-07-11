@@ -9,7 +9,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: com.zinoviev.conversion_microservice.messaging.event.*
+        spring.json.trusted.packages: com.zinoviev.flowManager.conversion.messaging.event.*
+        spring.json.type.mapping: com.zinoviev.flowManager.conversion.messaging.event.ConversionCreatedEvent:com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent
         spring.json.value.default.type: com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent
 
     producer:
@@ -46,7 +47,7 @@ storage:
   directory:
     conversion:
       processed:
-        pdf: /processed/pdf/
+        pdf: /converted/pdf/
 
 #Pdfbox custom font
 pdfbox:

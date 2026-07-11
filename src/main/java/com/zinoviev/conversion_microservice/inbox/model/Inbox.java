@@ -16,8 +16,8 @@ import java.util.UUID;
 public class Inbox {
 
     @Id
-    @Column(name = "message_id", updatable = false, nullable = false)
-    private UUID messageId;
+    @Column(name = "message_key", updatable = false, nullable = false)
+    private UUID messageKey;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -33,8 +33,8 @@ public class Inbox {
         RECEIVED, PROCESSING, COMPLETED, FAILED
     }
 
-    public Inbox(UUID messageId) {
-        this.messageId = messageId;
+    public Inbox(UUID messageKey) {
+        this.messageKey = messageKey;
         this.status = InboxStatus.RECEIVED;
         this.setCreatedAt(LocalDateTime.now());
     }

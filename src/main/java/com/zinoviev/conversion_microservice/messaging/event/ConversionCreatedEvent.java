@@ -5,6 +5,6 @@ import java.util.UUID;
 
 public record ConversionCreatedEvent(
         UUID eventId,
-        String fileKey,
+        String originalFileKey,
         LocalDateTime createdAt
 ) {}

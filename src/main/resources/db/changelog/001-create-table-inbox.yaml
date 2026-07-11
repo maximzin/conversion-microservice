@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: inbox
             columns:
               - column:
-                  name: message_id
+                  name: message_key
                   type: UUID
                   constraints:
                     primaryKey: true

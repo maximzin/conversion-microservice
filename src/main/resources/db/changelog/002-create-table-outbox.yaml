@@ -13,7 +13,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_outbox
               - column:
-                  name: message_id
+                  name: message_key
                   type: UUID
                   constraints:
                     nullable: false

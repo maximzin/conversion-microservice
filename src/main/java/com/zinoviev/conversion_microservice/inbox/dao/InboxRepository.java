@@ -13,21 +13,21 @@ import java.util.UUID;
 
 @Repository
 public interface InboxRepository extends JpaRepository<Inbox, UUID> {
-    Optional<Inbox> findByMessageId(UUID messageId);
+    Optional<Inbox> findByMessageKey(UUID messageKey);
 
     @Modifying
     @Query("""
         UPDATE Inbox i set i.status = :newStatus
-        WHERE i.messageId = :messageId
+        WHERE i.messageKey = :messageKey
     """)
-    void setNewStatusForMessage(@Param("messageId") UUID messageID, @Param("newStatus") Inbox.InboxStatus newStatus);
+    void setNewStatusForMessage(@Param("messageKey") UUID messageKey, @Param("newStatus") Inbox.InboxStatus newStatus);
 
     @Modifying
     @Query("""
         UPDATE Inbox i set i.processedAt = :processedAt
-        WHERE i.messageId = :messageId
+        WHERE i.messageKey = :messageKey
     """)
-    void setProcessedAtForMessage(@Param("messageId") UUID messageID, @Param("processedAt") LocalDateTime processedAt);
+    void setProcessedAtForMessage(@Param("messageKey") UUID messageKey, @Param("processedAt") LocalDateTime processedAt);
 
     @Modifying
     @Query("""

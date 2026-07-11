@@ -27,8 +27,8 @@ public class OutboxServiceImpl implements OutboxService {
 
     @Override
     @Transactional
-    public void save(UUID messageId, String topicName, String payload) {
-        Outbox outbox = new Outbox(messageId, topicName, payload);
+    public void save(UUID messageKey, String topicName, String payload) {
+        Outbox outbox = new Outbox(messageKey, topicName, payload);
         outboxRepository.save(outbox);
     }
 
@@ -46,13 +46,13 @@ public class OutboxServiceImpl implements OutboxService {
             ProducerRecord<String, Object> record =
                     new ProducerRecord<>(
                             outbox.getTopicName(),
-                            outbox.getMessageId().toString(),
+                            outbox.getMessageKey().toString(),
                             event);
 
-            record.headers().add("messageId", outbox.getMessageId().toString().getBytes());
+            record.headers().add("message_key", outbox.getMessageKey().toString().getBytes());
 
             kafkaTemplate.send(record).get();
-            log.info("Сообщение в {} успешно отправлено, messageId: {}", outbox.getTopicName(), outbox.getMessageId());
+            log.info("Сообщение в {} успешно отправлено, message_key: {}", outbox.getTopicName(), outbox.getMessageKey());
 
             outboxRepository.deleteById(outbox.getId());
         }

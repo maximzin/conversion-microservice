@@ -66,7 +66,7 @@ class FileKeyUtilsTest {
                 .isEqualTo("");
     }
 
-    // Creating fileKey
+    // Creating originalFileKey
     @DisplayName("Даем корректные параметры, должен вернуть полный ключ")
     @Test
     void createFileKey_shouldReturnCorrectFileKey() {
