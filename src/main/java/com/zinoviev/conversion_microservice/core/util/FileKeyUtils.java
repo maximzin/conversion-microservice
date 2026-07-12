@@ -1,4 +1,4 @@
-package com.zinoviev.conversion_microservice.common.util;
+package com.zinoviev.conversion_microservice.core.util;
 
 public class FileKeyUtils {
 

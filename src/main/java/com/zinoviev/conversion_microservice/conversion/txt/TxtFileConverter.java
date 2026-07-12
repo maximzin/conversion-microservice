@@ -1,7 +1,7 @@
 package com.zinoviev.conversion_microservice.conversion.txt;
 
-import com.zinoviev.conversion_microservice.common.exception.conversion.TxtConversionException;
 import com.zinoviev.conversion_microservice.conversion.api.FileConverter;
+import com.zinoviev.conversion_microservice.core.exception.conversion.TxtConversionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;

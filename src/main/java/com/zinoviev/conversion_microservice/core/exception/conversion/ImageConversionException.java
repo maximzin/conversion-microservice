@@ -1,4 +1,4 @@
-package com.zinoviev.conversion_microservice.common.exception.conversion;
+package com.zinoviev.conversion_microservice.core.exception.conversion;
 
 public class ImageConversionException extends ConversionException {
 

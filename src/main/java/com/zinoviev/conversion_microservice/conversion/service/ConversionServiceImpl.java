@@ -1,10 +1,10 @@
 package com.zinoviev.conversion_microservice.conversion.service;
 
-import com.zinoviev.conversion_microservice.common.exception.NotSupportedFileExtensionException;
-import com.zinoviev.conversion_microservice.common.exception.conversion.ZipExtractionException;
-import com.zinoviev.conversion_microservice.common.util.FileKeyUtils;
 import com.zinoviev.conversion_microservice.conversion.api.FileConverter;
 import com.zinoviev.conversion_microservice.conversion.service.converterRegistry.ConverterRegistryService;
+import com.zinoviev.conversion_microservice.core.exception.NotSupportedFileExtensionException;
+import com.zinoviev.conversion_microservice.core.exception.conversion.ZipExtractionException;
+import com.zinoviev.conversion_microservice.core.util.FileKeyUtils;
 import com.zinoviev.conversion_microservice.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

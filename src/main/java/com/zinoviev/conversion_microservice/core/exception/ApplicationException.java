@@ -1,4 +1,4 @@
-package com.zinoviev.conversion_microservice.common.exception;
+package com.zinoviev.conversion_microservice.core.exception;
 
 public class ApplicationException extends RuntimeException {
     private final String message;

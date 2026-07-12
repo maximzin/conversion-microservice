@@ -1,6 +1,6 @@
 package com.zinoviev.conversion_microservice.util;
 
-import com.zinoviev.conversion_microservice.common.util.FileKeyUtils;
+import com.zinoviev.conversion_microservice.core.util.FileKeyUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

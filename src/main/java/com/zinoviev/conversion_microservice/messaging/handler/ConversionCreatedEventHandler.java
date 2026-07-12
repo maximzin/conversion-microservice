@@ -2,8 +2,8 @@ package com.zinoviev.conversion_microservice.messaging.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zinoviev.conversion_microservice.common.exception.UnknownMessageStatusException;
 import com.zinoviev.conversion_microservice.conversion.service.ConversionService;
+import com.zinoviev.conversion_microservice.core.exception.UnknownMessageStatusException;
 import com.zinoviev.conversion_microservice.inbox.model.Inbox;
 import com.zinoviev.conversion_microservice.inbox.service.InboxService;
 import com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent;
