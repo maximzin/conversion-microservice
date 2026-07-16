@@ -1,3 +1,65 @@
 spring:
   application:
     name: conversion-microservice
+
+  ### kafka
+  kafka:
+    consumer:
+      group-id: conversion-created-events-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.zinoviev.flowManager.conversion.messaging.event.*
+        spring.json.type.mapping: com.zinoviev.flowManager.conversion.messaging.event.ConversionCreatedEvent:com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent
+        spring.json.value.default.type: com.zinoviev.conversion_microservice.messaging.event.ConversionCreatedEvent
+
+    producer:
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 5
+      properties:
+        retry.backoff: 1000
+        delivery.timeout.ms: 120000
+        enable.idempotence: true
+        linger.ms: 0
+        max.in.flight.requests.per.connection: 5
+        request.timeout.ms: 30000
+
+  ### Postgres DB
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/db.changelog-master.yaml
+
+# Topic names
+topic:
+  conversion:
+    created:
+      events: conversion-created-events-topic
+    processed:
+      events: conversion-processed-events-topic
+
+# MinIO dir paths
+storage:
+  directory:
+    conversion:
+      processed:
+        pdf: /converted/pdf/
+
+#Pdfbox custom font
+pdfbox:
+  custom-font: /font/DejaVuSans.ttf
+
+inbox:
+  duration-hours-to-delete: 6 # удаляются записи старее 6 часов
+  deletion-period-cron: '0 0 */3 * * *' # каждые 3 часа
+
+outbox:
+  sending-period-cron: '0 */5 * * * *' # каждые 5 минут'
+
+logging:
+  charset:
+    console: UTF-8
