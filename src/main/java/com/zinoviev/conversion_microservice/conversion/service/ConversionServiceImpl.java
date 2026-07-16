@@ -24,9 +24,6 @@ import java.util.zip.ZipInputStream;
 @RequiredArgsConstructor
 public class ConversionServiceImpl implements ConversionService {
 
-    @Value("${minio.bucket-name}")
-    private String bucketName;
-
     @Value("${storage.directory.conversion.processed.pdf}")
     private String dirForConvertedPdf;
 
@@ -38,7 +35,7 @@ public class ConversionServiceImpl implements ConversionService {
 
     // Получаем originalFileKey файла в хранилище
     @Override
-    public List<String> convertFileToPdf(String fileKey) {
+    public List<String> convertFileToPdf(String fileKey, String messageKey) {
 
         // Узнаем название и расширение файла
         String fileExtension = FileKeyUtils.parseFileExtension(fileKey);
@@ -48,15 +45,15 @@ public class ConversionServiceImpl implements ConversionService {
 
         // Если у нас архив, то каждый файл в нём превращается в PDF (если расширение позволяет)
         if (ARCHIVE_EXTENSIONS.contains(fileExtension)) {
-            fileKeys.addAll(processArchive(fileKey));
+            fileKeys.addAll(processArchive(fileKey, messageKey));
         } else {
-            fileKeys.add(processSingleFile(fileKey));
+            fileKeys.add(processSingleFile(fileKey, messageKey));
         }
         return fileKeys;
     }
 
     // Обработка обычного файла (TXT, PNG, JPG)
-    private String processSingleFile(String fileKey) {
+    private String processSingleFile(String fileKey, String messageKey) {
 
         String fileExtension = FileKeyUtils.parseFileExtension(fileKey);
         String fileName = FileKeyUtils.parseFileNameWithoutExtension(fileKey);
@@ -73,7 +70,7 @@ public class ConversionServiceImpl implements ConversionService {
         byte[] convertedPdfFileBytes = converter.convert(fileExtension, originalFileBytes);
 
         // Сохраняем результат
-        String convertedPdfFileKey = FileKeyUtils.createFileKey(dirForConvertedPdf, fileName, ".pdf");
+        String convertedPdfFileKey = FileKeyUtils.createFileKey(dirForConvertedPdf, messageKey, fileName, ".pdf");
 
         storageService.uploadFile(convertedPdfFileKey, convertedPdfFileBytes, "application/pdf");
 
@@ -85,7 +82,7 @@ public class ConversionServiceImpl implements ConversionService {
 
 
     // Обработка архива
-    private List<String> processArchive(String fileKey) {
+    private List<String> processArchive(String fileKey, String messageKey) {
         byte[] archiveContent = storageService.downloadFile(fileKey);
 
         List<ExtractedFile> extractedFiles = extractFilesFromArchive(fileKey,archiveContent);
@@ -96,7 +93,7 @@ public class ConversionServiceImpl implements ConversionService {
 
         for (ExtractedFile file : extractedFiles) {
             try {
-                String convertedPdfFileKey = convertInnerFile(file);
+                String convertedPdfFileKey = convertInnerFile(file, messageKey);
                 log.info("Сконвертирован файл из архива: {} -> {}", fileKey, convertedPdfFileKey);
                 convertedFileKeys.add(convertedPdfFileKey);
             } catch (Exception e) {
@@ -129,7 +126,7 @@ public class ConversionServiceImpl implements ConversionService {
     }
 
     // Конвертирует один файл из архива
-    private String convertInnerFile(ExtractedFile extractedFile) {
+    private String convertInnerFile(ExtractedFile extractedFile, String messageKey) {
         String innerFileName = FileKeyUtils.parseFileNameWithoutExtension(extractedFile.name());
         String innerFileExtension = FileKeyUtils.parseFileExtension(extractedFile.name());
 
@@ -142,7 +139,7 @@ public class ConversionServiceImpl implements ConversionService {
         byte[] convertedPdfFileBytes = converter.convert(innerFileExtension, extractedFile.fileBytes());
 
         // Сохраняем результат
-        String convertedPdfFileKey = FileKeyUtils.createFileKey(dirForConvertedPdf, innerFileName, ".pdf");
+        String convertedPdfFileKey = FileKeyUtils.createFileKey(dirForConvertedPdf, messageKey, innerFileName, ".pdf");
 
         storageService.uploadFile(convertedPdfFileKey, convertedPdfFileBytes, "application/pdf");
 

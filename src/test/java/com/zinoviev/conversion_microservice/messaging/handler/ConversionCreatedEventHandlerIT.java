@@ -103,7 +103,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         record.headers().add("messageKey", messageKey.toString().getBytes());
 
         // when
-        when(conversionService.convertFileToPdf(anyString()))
+        when(conversionService.convertFileToPdf(anyString(), anyString()))
                 .thenReturn(new ArrayList<>(List.of(readyFileKey)));
 
         kafkaTemplate.send(record).get();
@@ -159,7 +159,7 @@ class ConversionCreatedEventHandlerIT extends AbstractIT {
         record.headers().add("messageKey", messageKey.toString().getBytes());
 
         // when
-        when(conversionService.convertFileToPdf(anyString()))
+        when(conversionService.convertFileToPdf(anyString(), anyString()))
                 .thenReturn(new ArrayList<>(List.of(readyFileKey)));
 
         Thread.sleep(2000);

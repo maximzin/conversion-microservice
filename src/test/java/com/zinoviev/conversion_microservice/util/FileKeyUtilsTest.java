@@ -72,14 +72,15 @@ class FileKeyUtilsTest {
     void createFileKey_shouldReturnCorrectFileKey() {
         // given
         String directoryPath = "/files/document/";
+        String messageKey = "bea5098c-cfd2-4c2b-b72c-400aa26a0c5a";
         String fileName = "document";
         String fileExtension = ".txt";
 
         // when
-        String fileKey = FileKeyUtils.createFileKey(directoryPath, fileName, fileExtension);
+        String fileKey = FileKeyUtils.createFileKey(directoryPath, messageKey, fileName, fileExtension);
 
         // then
         assertThat(fileKey)
-                .isEqualTo("/files/document/document.txt");
+                .isEqualTo("/files/document/bea5098c-cfd2-4c2b-b72c-400aa26a0c5a/document.txt");
     }
 }

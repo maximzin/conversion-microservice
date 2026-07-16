@@ -43,13 +43,12 @@ public class FileKeyUtils {
                 : fileKey;
 
         // Получаем имя файла (всё после последнего слеша)
-        String fileName = normalizedKey.substring(
-                normalizedKey.lastIndexOf('/') + 1);
 
-        return fileName;
+        return normalizedKey.substring(
+                normalizedKey.lastIndexOf('/') + 1);
     }
 
-    public static String createFileKey(String directoryPath, String fileName, String fileExtension) {
-        return String.join("", directoryPath, fileName, fileExtension);
+    public static String createFileKey(String directoryPath, String messageKey, String fileName, String fileExtension) {
+        return String.join("", directoryPath, messageKey, "/", fileName, fileExtension);
     }
 }

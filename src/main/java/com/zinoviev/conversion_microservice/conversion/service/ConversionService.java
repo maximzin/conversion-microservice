@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ConversionService {
 
-    List<String> convertFileToPdf(String fileKey);
+    List<String> convertFileToPdf(String fileKey, String messageKey);
 
 }

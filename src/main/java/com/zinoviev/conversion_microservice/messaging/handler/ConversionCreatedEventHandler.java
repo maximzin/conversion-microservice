@@ -82,7 +82,7 @@ public class ConversionCreatedEventHandler {
 
         try {
             // Получаем список ключей сконвертированных файлов
-            List<String> convertedFileKeys = conversionService.convertFileToPdf(event.originalFileKey());
+            List<String> convertedFileKeys = conversionService.convertFileToPdf(event.originalFileKey(), messageKey);
 
             // Посылаем результаты в Kafka
             for (String convertedFileKey : convertedFileKeys) {
